@@ -4,8 +4,6 @@ const Payday = require('../models/Payday');
 
 // route get payday  @paydayController.getPaydays
 exports.getPaydays = (req, res) => {
-  console.log(req.body);
-
   Payday.find((err, paydays) => {
     if(err) {
       res.status(500).json({
@@ -21,7 +19,6 @@ exports.getPaydays = (req, res) => {
 }
 
 exports.getOnePayday = (req, res) => {
-  console.log(req.params.id);
   if(!ObjectID.isValid(req.params.id)) {
     res.status(400).json({
       "message": "Invalid request",
@@ -43,16 +40,22 @@ exports.getOnePayday = (req, res) => {
   }
 }
 
-exports.postPaydays = (req, res) => {
-  console.log(req.body);
+exports.createPayday = (req, res) => {
   if(!req.body.player || !req.body.rule || !req.body.date || !req.body.payed) {
     res.status(400).json({
       "message": "Invalid request"
     });
   } else {
-    _payday = new Payday(req.body);
+    const _payday = new Payday({
+      _id: new ObjectID(),
+      player: req.body.player,
+      rule: req.body.rule,
+      date: req.body.date,
+      payed: req.body.payed
+    });
     _payday.save((err, payday) => {
       if(err) {
+        console.log(err);
         res.status(500).json({
           "message": "Internal error"
         });
@@ -63,5 +66,51 @@ exports.postPaydays = (req, res) => {
         });
       }
     });
+  } 
+}
+
+exports.updateOnePayday = (req, res) => {
+  if(!req.params.id || !ObjectID.isValid(req.params.id) || !req.body.player || !req.body.rule || !req.body.date || !req.body.payed) {
+    res.status(400).json({
+      "message": "Invalid request"
+    });
+  } else {
+    Payday.findByIdAndUpdate(
+      { _id: req.params.id }, req.body, false, (err, result) => {
+        if(err) {
+          res.status(500).json({
+            "message": "Internal error"
+          });
+        } else {
+          res.status(201).json({
+            "message": "Payday updated",
+            "data": result
+          });
+        }
+      }
+    );
+  } 
+}
+
+exports.deleteOnePayday = (req, res) => {
+  if(!req.params.id || !ObjectID.isValid(req.params.id)) {
+    res.status(400).json({
+      "message": "Invalid request"
+    });
+  } else {
+    Payday.findByIdAndDelete(
+      { _id: req.params.id }, (err, result) => {
+        if(err) {
+          res.status(500).json({
+            "message": "Internal error"
+          });
+        } else {
+          res.status(201).json({
+            "message": "Payday deleted",
+            "data": null
+          });
+        }
+      }
+    );
   } 
 }

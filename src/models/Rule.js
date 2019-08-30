@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 var ruleSchema = mongoose.Schema({
+    _id: mongoose.Types.ObjectId,
     nom:{
         type: String,
         required: true

@@ -4,8 +4,6 @@ const Rule = require('../models/Rule');
 
 // route get rule  @ruleController.getRules
 exports.getRules = (req, res) => {
-  console.log(req.body);
-
   Rule.find((err, rules) => {
     if(err) {
       res.status(500).json({
@@ -21,7 +19,6 @@ exports.getRules = (req, res) => {
 }
 
 exports.getOneRule = (req, res) => {
-  console.log(req.params.id);
   if(!ObjectID.isValid(req.params.id)) {
     res.status(400).json({
       "message": "Invalid request",
@@ -43,14 +40,16 @@ exports.getOneRule = (req, res) => {
   }
 }
 
-exports.postRules = (req, res) => {
-  console.log(req.body);
+exports.createRule = (req, res) => {
   if(!req.body.nom) {
     res.status(400).json({
       "message": "Invalid request"
     });
   } else {
-    _rule = new Rule(req.body);
+    const _rule = new Rule({
+      _id: new ObjectID(),
+      nom: req.body.nom
+    });
     _rule.save((err, rule) => {
       if(err) {
         res.status(500).json({
@@ -63,5 +62,51 @@ exports.postRules = (req, res) => {
         });
       }
     });
+  } 
+}
+
+exports.updateOneRule = (req, res) => {
+  if(!req.params.id || !ObjectID.isValid(req.params.id) || !req.body.nom) {
+    res.status(400).json({
+      "message": "Invalid request"
+    });
+  } else {
+    Rule.findByIdAndUpdate(
+      { _id: req.params.id }, req.body, false, (err, result) => {
+        if(err) {
+          res.status(500).json({
+            "message": "Internal error"
+          });
+        } else {
+          res.status(201).json({
+            "message": "Rule updated",
+            "data": result
+          });
+        }
+      }
+    );
+  } 
+}
+
+exports.deleteOneRule = (req, res) => {
+  if(!req.params.id || !ObjectID.isValid(req.params.id)) {
+    res.status(400).json({
+      "message": "Invalid request"
+    });
+  } else {
+    Rule.findByIdAndDelete(
+      { _id: req.params.id }, (err, result) => {
+        if(err) {
+          res.status(500).json({
+            "message": "Internal error"
+          });
+        } else {
+          res.status(201).json({
+            "message": "Rule deleted",
+            "data": null
+          });
+        }
+      }
+    );
   } 
 }

@@ -29,14 +29,20 @@ module.exports = function (app) {
 
     app.get('/v1/players', playerController.getPlayers);
     app.get('/v1/players/:id', playerController.getOnePlayer);
-    app.post('/v1/players', playerController.postPlayers);
+    app.post('/v1/players', playerController.createPlayer);
+    app.put('/v1/players/:id', playerController.updateOnePlayer);
+    app.delete('/v1/players/:id', playerController.deleteOnePlayer);
 
     app.get('/v1/rules', ruleController.getRules);
     app.get('/v1/rules/:id', ruleController.getOneRule);
-    app.post('/v1/rules', ruleController.postRules);
+    app.post('/v1/rules', ruleController.createRule);
+    app.put('/v1/rules/:id', ruleController.updateOneRule);
+    app.delete('/v1/rules/:id', ruleController.deleteOneRule);
 
     app.get('/v1/paydays', paydayController.getPaydays);
     app.get('/v1/paydays/:id', paydayController.getOnePayday);
-    app.post('/v1/paydays', paydayController.postPaydays);
+    app.post('/v1/paydays', paydayController.createPayday);
+    app.put('/v1/paydays/:id', paydayController.updateOnePayday);
+    app.delete('/v1/paydays/:id', paydayController.deleteOnePayday);
 
 };

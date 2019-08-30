@@ -13,6 +13,7 @@ const app = express();
 const router = require('./router');
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1/croissants',{useNewUrlParser:true});
+mongoose.set('useFindAndModify', false);
 //app.use(morgan('combined'));
 //const port = 443;
 const PORT = 3000;

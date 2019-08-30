@@ -4,8 +4,6 @@ const Player = require('../models/Player');
 
 // route get player  @playerController.getPlayers
 exports.getPlayers = (req, res) => {
-  console.log(req.body);
-
   Player.find((err, players) => {
     if(err) {
       res.status(500).json({
@@ -21,7 +19,6 @@ exports.getPlayers = (req, res) => {
 }
 
 exports.getOnePlayer = (req, res) => {
-  console.log(req.params.id);
   if(!ObjectID.isValid(req.params.id)) {
     res.status(400).json({
       "message": "Invalid request",
@@ -43,14 +40,17 @@ exports.getOnePlayer = (req, res) => {
   }
 }
 
-exports.postPlayers = (req, res) => {
-  console.log(req.body);
+exports.createPlayer = (req, res) => {
   if(!req.body.nom || ! req.body.prenom) {
     res.status(400).json({
       "message": "Invalid request"
     });
   } else {
-    _player = new Player(req.body);
+    const _player = new Player({
+      _id: new ObjectID(),
+      nom: req.body.nom,
+      prenom: req.body.prenom
+    });
     _player.save((err, player) => {
       if(err) {
         res.status(500).json({
@@ -63,5 +63,51 @@ exports.postPlayers = (req, res) => {
         });
       }
     });
+  } 
+}
+
+exports.updateOnePlayer = (req, res) => {
+  if(!req.params.id || !ObjectID.isValid(req.params.id) || !req.body.nom || !req.body.prenom) {
+    res.status(400).json({
+      "message": "Invalid request"
+    });
+  } else {
+    Player.findByIdAndUpdate(
+      { _id: req.params.id }, req.body, false, (err, result) => {
+        if(err) {
+          res.status(500).json({
+            "message": "Internal error"
+          });
+        } else {
+          res.status(201).json({
+            "message": "Player updated",
+            "data": result
+          });
+        }
+      }
+    );
+  } 
+}
+
+exports.deleteOnePlayer = (req, res) => {
+  if(!req.params.id || !ObjectID.isValid(req.params.id)) {
+    res.status(400).json({
+      "message": "Invalid request"
+    });
+  } else {
+    Player.findByIdAndDelete(
+      { _id: req.params.id }, (err, result) => {
+        if(err) {
+          res.status(500).json({
+            "message": "Internal error"
+          });
+        } else {
+          res.status(201).json({
+            "message": "Player deleted",
+            "data": null
+          });
+        }
+      }
+    );
   } 
 }

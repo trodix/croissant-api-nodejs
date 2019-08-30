@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 var playerSchema = mongoose.Schema({
+    _id: mongoose.Types.ObjectId,
     nom:{
         type: String,
         required: true
