@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
-const Player = require('../models/Player');
-const Rule = require('../models/Rule');
+//const Player = require('../models/Player');
+//const Rule = require('../models/Rule');
 
 var paydaySchema = mongoose.Schema({
     player:{
-        type: Player,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Player'
     },
     rule:{
-      type: Rule,
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Rule'
     },
     date:{
         type: Date,

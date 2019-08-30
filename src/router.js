@@ -1,6 +1,11 @@
-const routeTest = require('./controller/routeTest');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+
+const playerController = require('./controller/playerController');
+const ruleController = require('./controller/ruleController');
+const paydayController = require('./controller/paydayController');
+
+
 
 
 module.exports = function (app) {
@@ -22,8 +27,16 @@ module.exports = function (app) {
     app.use(bodyParser.urlencoded({limit: '500mb', extended: true}));
 
 
-    app.get('/v1/players', routeTest.getPlayers);
-    app.get('/v1/rules', routeTest.getRules);
-    app.get('/v1/paydays', routeTest.getPaydays);
+    app.get('/v1/players', playerController.getPlayers);
+    app.get('/v1/players/:id', playerController.getOnePlayer);
+    app.post('/v1/players', playerController.postPlayers);
+
+    app.get('/v1/rules', ruleController.getRules);
+    app.get('/v1/rules/:id', ruleController.getOneRule);
+    app.post('/v1/rules', ruleController.postRules);
+
+    app.get('/v1/paydays', paydayController.getPaydays);
+    app.get('/v1/paydays/:id', paydayController.getOnePayday);
+    app.post('/v1/paydays', paydayController.postPaydays);
 
 };
