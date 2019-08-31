@@ -6,11 +6,13 @@ var paydaySchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     player:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Player'
+        ref: 'Player',
+        required: true
     },
     rule:{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Rule'
+      ref: 'Rule',
+      required: true
     },
     date:{
         type: Date,

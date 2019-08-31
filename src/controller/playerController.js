@@ -1,5 +1,6 @@
 const ObjectID = require('mongodb').ObjectID;
 const Player = require('../models/Player');
+const Payday = require('../models/Payday');
 
 
 // route get player  @playerController.getPlayers
@@ -37,6 +38,29 @@ exports.getOnePlayer = (req, res) => {
         });
       }
     });
+  }
+}
+
+exports.getOnePlayerPaydays = (req, res) => {
+  if(!ObjectID.isValid(req.params.id)) {
+    res.status(400).json({
+      "message": "Invalid request",
+    });
+  } else {
+    Payday.find({player: req.params.id})
+      .exec()
+      .then((paydays) => {
+        res.status(200).json({
+          "message": "Success",
+          "data": paydays
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({
+          "message": "Internal error",
+        });
+      });
   }
 }
 

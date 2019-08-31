@@ -29,6 +29,7 @@ module.exports = function (app) {
 
     app.get('/v1/players', playerController.getPlayers);
     app.get('/v1/players/:id', playerController.getOnePlayer);
+    app.get('/v1/players/:id/paydays', playerController.getOnePlayerPaydays);
     app.post('/v1/players', playerController.createPlayer);
     app.put('/v1/players/:id', playerController.updateOnePlayer);
     app.delete('/v1/players/:id', playerController.deleteOnePlayer);
